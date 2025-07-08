@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="landing-page/zdravo-icon.png" alt="Zdravo" width="128" height="128">
+  <img src="landing-page/zdravo-icon.png" alt="Zdravo" width="512" height="512">
 </div>
 
 # Zdravo
