@@ -1,5 +1,5 @@
 ![ChatGPT Image Jul 5, 2025 at 06_07_31 PM](https://github.com/user-attachments/assets/2660f828-49c7-444d-beca-d8b01854667a)
-# bitchat
+# Zdravo
 
 A secure, decentralized, peer-to-peer messaging app that works over Bluetooth mesh networks. No internet required, no servers, no phone numbers - just pure encrypted communication.
 
@@ -76,7 +76,7 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 
 ### Getting Started
 
-1. Launch bitchat on your device
+1. Launch Zdravo on your device
 2. Set your nickname (or use the auto-generated one)
 3. You'll automatically connect to nearby peers
 4. Join a channel with `/j #general` or start chatting in public
@@ -128,7 +128,7 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 ## Technical Architecture
 
 ### Binary Protocol
-bitchat uses an efficient binary protocol optimized for Bluetooth LE:
+Zdravo uses an efficient binary protocol optimized for Bluetooth LE:
 - Compact packet format with 1-byte type field
 - TTL-based message routing (max 7 hops)
 - Automatic fragmentation for large messages

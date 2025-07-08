@@ -27,19 +27,19 @@ struct ContentView: View {
     @State private var showCommandSuggestions = false
     @State private var commandSuggestions: [String] = []
     @State private var showLeaveChannelAlert = false
-    
+
     private var backgroundColor: Color {
         colorScheme == .dark ? Color.black : Color.white
     }
-    
+
     private var textColor: Color {
         colorScheme == .dark ? Color.green : Color(red: 0, green: 0.5, blue: 0)
     }
-    
+
     private var secondaryTextColor: Color {
         colorScheme == .dark ? Color.green.opacity(0.8) : Color(red: 0, green: 0.5, blue: 0).opacity(0.8)
     }
-    
+
     var body: some View {
         ZStack {
             // Main content
@@ -87,7 +87,7 @@ struct ContentView: View {
                                 }
                             }
                     )
-                    
+
                     // Sidebar overlay
                     HStack(spacing: 0) {
                         // Tap to dismiss area
@@ -99,7 +99,7 @@ struct ContentView: View {
                                     sidebarDragOffset = 0
                                 }
                             }
-                        
+
                         sidebarView
                             #if os(macOS)
                             .frame(width: min(300, geometry.size.width * 0.4))
@@ -166,7 +166,7 @@ struct ContentView: View {
             Text("The password you entered is incorrect. Please try again.")
         }
     }
-    
+
     private var headerView: some View {
         HStack {
             if let privatePeerID = viewModel.selectedPrivateChatPeer,
@@ -184,9 +184,9 @@ struct ContentView: View {
                     .foregroundColor(textColor)
                 }
                 .buttonStyle(.plain)
-                
+
                 Spacer()
-                
+
                 HStack(spacing: 6) {
                     Image(systemName: "lock.fill")
                         .font(.system(size: 14))
@@ -196,9 +196,9 @@ struct ContentView: View {
                         .foregroundColor(Color.orange)
                 }
                 .frame(maxWidth: .infinity)
-                
+
                 Spacer()
-                
+
                 // Favorite button
                 Button(action: {
                     viewModel.toggleFavorite(peerID: privatePeerID)
@@ -222,9 +222,9 @@ struct ContentView: View {
                     .foregroundColor(textColor)
                 }
                 .buttonStyle(.plain)
-                
+
                 Spacer()
-                
+
                 Button(action: {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                         showSidebar.toggle()
@@ -244,9 +244,9 @@ struct ContentView: View {
                 }
                 .buttonStyle(.plain)
                 .frame(maxWidth: .infinity)
-                
+
                 Spacer()
-                
+
                 HStack(spacing: 8) {
                     // Show retention indicator for all users
                     if viewModel.retentionEnabledChannels.contains(currentChannel) {
@@ -255,7 +255,7 @@ struct ContentView: View {
                             .foregroundColor(Color.yellow)
                             .help("Messages in this channel are being saved locally")
                     }
-                    
+
                     // Save button - only for channel owner
                     if viewModel.channelCreators[currentChannel] == viewModel.meshService.myPeerID {
                         Button(action: {
@@ -268,7 +268,7 @@ struct ContentView: View {
                         .buttonStyle(.plain)
                         .help(viewModel.retentionEnabledChannels.contains(currentChannel) ? "Disable message retention" : "Enable message retention")
                     }
-                    
+
                     // Password button for channel creator only
                     if viewModel.channelCreators[currentChannel] == viewModel.meshService.myPeerID {
                         Button(action: {
@@ -287,7 +287,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    
+
                     // Leave channel button
                     Button(action: {
                         showLeaveChannelAlert = true
@@ -309,7 +309,7 @@ struct ContentView: View {
             } else {
                 // Public chat header
                 HStack(spacing: 4) {
-                    Text("bitchat*")
+                    Text("Zdravo*")
                         .font(.system(size: 18, weight: .medium, design: .monospaced))
                         .foregroundColor(textColor)
                         .onTapGesture(count: 3) {
@@ -320,12 +320,12 @@ struct ContentView: View {
                             // Single tap for app info
                             showAppInfo = true
                         }
-                    
+
                     HStack(spacing: 0) {
                         Text("@")
                             .font(.system(size: 14, design: .monospaced))
                             .foregroundColor(secondaryTextColor)
-                        
+
                         TextField("nickname", text: $viewModel.nickname)
                             .textFieldStyle(.plain)
                             .font(.system(size: 14, design: .monospaced))
@@ -339,36 +339,36 @@ struct ContentView: View {
                             }
                     }
                 }
-                
+
                 Spacer()
-                
+
                 // People counter with unread indicator
                 HStack(spacing: 4) {
                     // Check for any unread channel messages
                     let hasUnreadChannelMessages = viewModel.unreadChannelMessages.values.contains { $0 > 0 }
-                    
+
                     if hasUnreadChannelMessages {
                         Image(systemName: "number")
                             .font(.system(size: 12))
                             .foregroundColor(Color.blue)
                     }
-                    
+
                     if !viewModel.unreadPrivateMessages.isEmpty {
                         Image(systemName: "envelope.fill")
                             .font(.system(size: 12))
                             .foregroundColor(Color.orange)
                     }
-                    
+
                     let otherPeersCount = viewModel.connectedPeers.filter { $0 != viewModel.meshService.myPeerID }.count
                     let channelCount = viewModel.joinedChannels.count
-                    
+
                     HStack(spacing: 4) {
                         // People icon with count
                         Image(systemName: "person.2.fill")
                             .font(.system(size: 11))
                         Text("\(otherPeersCount)")
                             .font(.system(size: 12, design: .monospaced))
-                        
+
                         // Channels icon with count (only if there are channels)
                         if channelCount > 0 {
                             Text("·")
@@ -393,7 +393,7 @@ struct ContentView: View {
         .padding(.horizontal, 12)
         .background(backgroundColor.opacity(0.95))
     }
-    
+
     private var messagesView: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -410,12 +410,12 @@ struct ContentView: View {
                             return viewModel.messages
                         }
                     }()
-                    
+
                     ForEach(messages, id: \.id) { message in
                         VStack(alignment: .leading, spacing: 4) {
                             // Check if current user is mentioned
                             let _ = message.mentions?.contains(viewModel.nickname) ?? false
-                            
+
                             if message.sender == "system" {
                                 // System messages
                                 Text(viewModel.formatMessageAsText(message, colorScheme: colorScheme))
@@ -431,7 +431,7 @@ struct ContentView: View {
                                             .textSelection(.enabled)
                                             .fixedSize(horizontal: false, vertical: true)
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                        
+
                                         // Delivery status indicator for private messages
                                         if message.isPrivate && message.sender == viewModel.nickname,
                                            let status = message.deliveryStatus {
@@ -439,7 +439,7 @@ struct ContentView: View {
                                                 .padding(.leading, 4)
                                         }
                                     }
-                                    
+
                                     // Check for links and show preview
                                     if let markdownLink = message.content.extractMarkdownLink() {
                                         // Don't show link preview if the message is just the emoji
@@ -498,11 +498,11 @@ struct ContentView: View {
                 if let peerID = viewModel.selectedPrivateChatPeer {
                     // Try multiple times to ensure read receipts are sent
                     viewModel.markPrivateMessagesAsRead(from: peerID)
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         viewModel.markPrivateMessagesAsRead(from: peerID)
                     }
-                    
+
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         viewModel.markPrivateMessagesAsRead(from: peerID)
                     }
@@ -510,7 +510,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private var inputView: some View {
         VStack(spacing: 0) {
             // @mentions autocomplete
@@ -542,7 +542,7 @@ struct ContentView: View {
                 )
                 .padding(.horizontal, 12)
             }
-            
+
             // Command suggestions
             if showCommandSuggestions && !commandSuggestions.isEmpty {
                 VStack(alignment: .leading, spacing: 0) {
@@ -558,18 +558,18 @@ struct ContentView: View {
                         (["/unblock"], "<nickname>", "unblock a peer"),
                         (["/w"], nil, "see who's online")
                     ]
-                    
+
                     let channelCommandInfo: [(commands: [String], syntax: String?, description: String)] = [
                         (["/pass"], "[password]", "change channel password"),
                         (["/save"], nil, "save channel messages locally"),
                         (["/transfer"], "<nickname>", "transfer channel ownership")
                     ]
-                    
+
                     // Build the display
-                    let allCommands = viewModel.currentChannel != nil 
-                        ? commandInfo + channelCommandInfo 
+                    let allCommands = viewModel.currentChannel != nil
+                        ? commandInfo + channelCommandInfo
                         : commandInfo
-                    
+
                     // Show matching commands
                     ForEach(commandSuggestions, id: \.self) { command in
                         // Find the command info for this suggestion
@@ -586,16 +586,16 @@ struct ContentView: View {
                                         .font(.system(size: 11, design: .monospaced))
                                         .foregroundColor(textColor)
                                         .fontWeight(.medium)
-                                    
+
                                     // Show syntax if any
                                     if let syntax = info.syntax {
                                         Text(syntax)
                                             .font(.system(size: 10, design: .monospaced))
                                             .foregroundColor(secondaryTextColor.opacity(0.8))
                                     }
-                                    
+
                                     Spacer()
-                                    
+
                                     // Show description
                                     Text(info.description)
                                         .font(.system(size: 10, design: .monospaced))
@@ -617,7 +617,7 @@ struct ContentView: View {
                 )
                 .padding(.horizontal, 12)
             }
-            
+
             HStack(alignment: .center, spacing: 4) {
             if viewModel.selectedPrivateChatPeer != nil {
                 Text("<@\(viewModel.nickname)> →")
@@ -641,7 +641,7 @@ struct ContentView: View {
                     .fixedSize()
                     .padding(.leading, 12)
             }
-            
+
             TextField("", text: $messageText)
                 .textFieldStyle(.plain)
                 .font(.system(size: 14, design: .monospaced))
@@ -652,7 +652,7 @@ struct ContentView: View {
                     // Get cursor position (approximate - end of text for now)
                     let cursorPosition = newValue.count
                     viewModel.updateAutocomplete(for: newValue, cursorPosition: cursorPosition)
-                    
+
                     // Check for command autocomplete
                     if newValue.hasPrefix("/") && newValue.count >= 1 {
                         // Build context-aware command list
@@ -667,27 +667,27 @@ struct ContentView: View {
                             ("/unblock", "unblock a peer"),
                             ("/w", "see who's online")
                         ]
-                        
+
                         // Add channel-specific commands if in a channel
                         if viewModel.currentChannel != nil {
                             commandDescriptions.append(("/pass", "change channel password"))
                             commandDescriptions.append(("/save", "save channel messages locally"))
                             commandDescriptions.append(("/transfer", "transfer channel ownership"))
                         }
-                        
+
                         let input = newValue.lowercased()
-                        
+
                         // Map of aliases to primary commands
                         let aliases: [String: String] = [
                             "/join": "/j",
                             "/msg": "/m"
                         ]
-                        
+
                         // Filter commands, but convert aliases to primary
                         commandSuggestions = commandDescriptions
                             .filter { $0.0.starts(with: input) }
                             .map { $0.0 }
-                        
+
                         // Also check if input matches an alias
                         for (alias, primary) in aliases {
                             if alias.starts(with: input) && !commandSuggestions.contains(primary) {
@@ -696,7 +696,7 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        
+
                         // Remove duplicates and sort
                         commandSuggestions = Array(Set(commandSuggestions)).sorted()
                         showCommandSuggestions = !commandSuggestions.isEmpty
@@ -708,7 +708,7 @@ struct ContentView: View {
                 .onSubmit {
                     sendMessage()
                 }
-            
+
             Button(action: sendMessage) {
                 Image(systemName: "arrow.up.circle.fill")
                     .font(.system(size: 20))
@@ -727,12 +727,12 @@ struct ContentView: View {
             isTextFieldFocused = true
         }
     }
-    
+
     private func sendMessage() {
         viewModel.sendMessage(messageText)
         messageText = ""
     }
-    
+
     @ViewBuilder
     private var channelsSection: some View {
         if !viewModel.joinedChannels.isEmpty {
@@ -745,14 +745,14 @@ struct ContentView: View {
                 }
                 .foregroundColor(secondaryTextColor)
                 .padding(.horizontal, 12)
-                
+
                 ForEach(Array(viewModel.joinedChannels).sorted(), id: \.self) { channel in
                     channelButton(for: channel)
                 }
             }
         }
     }
-    
+
     @ViewBuilder
     private func channelButton(for channel: String) -> some View {
         Button(action: {
@@ -776,13 +776,13 @@ struct ContentView: View {
                         .font(.system(size: 10))
                         .foregroundColor(secondaryTextColor)
                 }
-                
+
                 Text(channel)
                     .font(.system(size: 14, design: .monospaced))
                     .foregroundColor(viewModel.currentChannel == channel ? Color.blue : textColor)
-                
+
                 Spacer()
-                
+
                 // Unread count
                 if let unreadCount = viewModel.unreadChannelMessages[channel], unreadCount > 0 {
                     Text("\(unreadCount)")
@@ -793,7 +793,7 @@ struct ContentView: View {
                         .background(Color.orange)
                         .clipShape(Capsule())
                 }
-                
+
                 // Channel controls
                 if viewModel.currentChannel == channel {
                     channelControls(for: channel)
@@ -805,7 +805,7 @@ struct ContentView: View {
         .padding(.vertical, 4)
         .background(viewModel.currentChannel == channel ? backgroundColor.opacity(0.5) : Color.clear)
     }
-    
+
     @ViewBuilder
     private func channelControls(for channel: String) -> some View {
         HStack(spacing: 4) {
@@ -836,7 +836,7 @@ struct ContentView: View {
                 }
                 .buttonStyle(.plain)
             }
-            
+
             // Leave button
             Button(action: {
                 showLeaveChannelAlert = true
@@ -862,14 +862,14 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private var sidebarView: some View {
         HStack(spacing: 0) {
             // Grey vertical bar for visual continuity
             Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(width: 1)
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 // Header - match main toolbar height
                 HStack {
@@ -881,20 +881,20 @@ struct ContentView: View {
                 .frame(height: 44) // Match header height
                 .padding(.horizontal, 12)
                 .background(backgroundColor.opacity(0.95))
-                
+
                 Divider()
-            
+
             // Rooms and People list
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     // Channels section
                     channelsSection
-                    
+
                     if !viewModel.joinedChannels.isEmpty {
                         Divider()
                             .padding(.vertical, 4)
                     }
-                    
+
                     // People section
                     VStack(alignment: .leading, spacing: 8) {
                         // Show appropriate header based on context
@@ -913,7 +913,7 @@ struct ContentView: View {
                             .foregroundColor(secondaryTextColor)
                             .padding(.horizontal, 12)
                         }
-                        
+
                         if viewModel.connectedPeers.isEmpty {
                             Text("No one connected")
                                 .font(.system(size: 14, design: .monospaced))
@@ -930,48 +930,48 @@ struct ContentView: View {
                             let peerNicknames = viewModel.meshService.getPeerNicknames()
                             let peerRSSI = viewModel.meshService.getPeerRSSI()
                             let myPeerID = viewModel.meshService.myPeerID
-                            
+
                             // Filter peers based on current channel
                             let peersToShow: [String] = {
                                 if let currentChannel = viewModel.currentChannel,
                                    let channelMemberIDs = viewModel.channelMembers[currentChannel] {
                                     // Show only peers who have sent messages to this channel (including self)
-                                    
+
                                     // Start with channel members who are also connected
                                     var memberPeers = viewModel.connectedPeers.filter { channelMemberIDs.contains($0) }
-                                    
+
                                     // Always include ourselves if we're a channel member
                                     if channelMemberIDs.contains(myPeerID) && !memberPeers.contains(myPeerID) {
                                         memberPeers.append(myPeerID)
                                     }
-                                    
+
                                     return memberPeers
                                 } else {
                                     // Show all connected peers in main chat
                                     return viewModel.connectedPeers
                                 }
                             }()
-                            
+
                         // Sort peers: favorites first, then alphabetically by nickname
                         let sortedPeers = peersToShow.sorted { peer1, peer2 in
                             let isFav1 = viewModel.isFavorite(peerID: peer1)
                             let isFav2 = viewModel.isFavorite(peerID: peer2)
-                            
+
                             if isFav1 != isFav2 {
                                 return isFav1 // Favorites come first
                             }
-                            
+
                             let name1 = peerNicknames[peer1] ?? "person-\(peer1.prefix(4))"
                             let name2 = peerNicknames[peer2] ?? "person-\(peer2.prefix(4))"
                             return name1 < name2
                         }
-                        
+
                         ForEach(sortedPeers, id: \.self) { peerID in
                             let displayName = peerID == myPeerID ? viewModel.nickname : (peerNicknames[peerID] ?? "person-\(peerID.prefix(4))")
                             let rssi = peerRSSI[peerID]?.intValue ?? -100
                             let isFavorite = viewModel.isFavorite(peerID: peerID)
                             let isMe = peerID == myPeerID
-                            
+
                             HStack(spacing: 8) {
                                 // Signal strength indicator or unread message icon
                                 if isMe {
@@ -987,7 +987,7 @@ struct ContentView: View {
                                         .fill(viewModel.getRSSIColor(rssi: rssi, colorScheme: colorScheme))
                                         .frame(width: 8, height: 8)
                                 }
-                                
+
                                 // Favorite star (not for self)
                                 if !isMe {
                                     Button(action: {
@@ -999,14 +999,14 @@ struct ContentView: View {
                                     }
                                     .buttonStyle(.plain)
                                 }
-                                
+
                                 // Peer name
                                 if isMe {
                                     HStack {
                                         Text(displayName + " (you)")
                                             .font(.system(size: 14, design: .monospaced))
                                             .foregroundColor(textColor)
-                                        
+
                                         Spacer()
                                     }
                                 } else {
@@ -1023,7 +1023,7 @@ struct ContentView: View {
                                             Text(displayName)
                                                 .font(.system(size: 14, design: .monospaced))
                                                 .foregroundColor(peerNicknames[peerID] != nil ? textColor : secondaryTextColor)
-                                            
+
                                             Spacer()
                                         }
                                     }
@@ -1039,7 +1039,7 @@ struct ContentView: View {
                 }
                 .padding(.vertical, 8)
             }
-            
+
             Spacer()
         }
         .background(backgroundColor)
@@ -1053,18 +1053,18 @@ struct MessageContentView: View {
     let viewModel: ChatViewModel
     let colorScheme: ColorScheme
     let isMentioned: Bool
-    
+
     var body: some View {
         let content = message.content
         let hashtagPattern = "#([a-zA-Z0-9_]+)"
         let mentionPattern = "@([a-zA-Z0-9_]+)"
-        
+
         let hashtagRegex = try? NSRegularExpression(pattern: hashtagPattern, options: [])
         let mentionRegex = try? NSRegularExpression(pattern: mentionPattern, options: [])
-        
+
         let hashtagMatches = hashtagRegex?.matches(in: content, options: [], range: NSRange(location: 0, length: content.count)) ?? []
         let mentionMatches = mentionRegex?.matches(in: content, options: [], range: NSRange(location: 0, length: content.count)) ?? []
-        
+
         // Combine all matches and sort by location
         var allMatches: [(range: NSRange, type: String)] = []
         for match in hashtagMatches {
@@ -1074,11 +1074,11 @@ struct MessageContentView: View {
             allMatches.append((match.range(at: 0), "mention"))
         }
         allMatches.sort { $0.range.location < $1.range.location }
-        
+
         // Build the text as a concatenated Text view for natural wrapping
         let segments = buildTextSegments()
         var result = Text("")
-        
+
         for segment in segments {
             if segment.type == "hashtag" {
                 // Note: We can't have clickable links in concatenated Text, so hashtags won't be clickable
@@ -1096,25 +1096,25 @@ struct MessageContentView: View {
                     .fontWeight(isMentioned ? .bold : .regular)
             }
         }
-        
+
         return result
             .textSelection(.enabled)
     }
-    
+
     private func buildTextSegments() -> [(text: String, type: String)] {
         var segments: [(text: String, type: String)] = []
         let content = message.content
         var lastEnd = content.startIndex
-        
+
         let hashtagPattern = "#([a-zA-Z0-9_]+)"
         let mentionPattern = "@([a-zA-Z0-9_]+)"
-        
+
         let hashtagRegex = try? NSRegularExpression(pattern: hashtagPattern, options: [])
         let mentionRegex = try? NSRegularExpression(pattern: mentionPattern, options: [])
-        
+
         let hashtagMatches = hashtagRegex?.matches(in: content, options: [], range: NSRange(location: 0, length: content.count)) ?? []
         let mentionMatches = mentionRegex?.matches(in: content, options: [], range: NSRange(location: 0, length: content.count)) ?? []
-        
+
         // Combine all matches and sort by location
         var allMatches: [(range: NSRange, type: String)] = []
         for match in hashtagMatches {
@@ -1124,7 +1124,7 @@ struct MessageContentView: View {
             allMatches.append((match.range(at: 0), "mention"))
         }
         allMatches.sort { $0.range.location < $1.range.location }
-        
+
         for (matchRange, matchType) in allMatches {
             if let range = Range(matchRange, in: content) {
                 // Add text before the match
@@ -1134,15 +1134,15 @@ struct MessageContentView: View {
                         segments.append((beforeText, "text"))
                     }
                 }
-                
+
                 // Add the match
                 let matchText = String(content[range])
                 segments.append((matchText, matchType))
-                
+
                 lastEnd = range.upperBound
             }
         }
-        
+
         // Add any remaining text
         if lastEnd < content.endIndex {
             let remainingText = String(content[lastEnd...])
@@ -1150,7 +1150,7 @@ struct MessageContentView: View {
                 segments.append((remainingText, "text"))
             }
         }
-        
+
         return segments
     }
 }
@@ -1159,27 +1159,27 @@ struct MessageContentView: View {
 struct DeliveryStatusView: View {
     let status: DeliveryStatus
     let colorScheme: ColorScheme
-    
+
     private var textColor: Color {
         colorScheme == .dark ? Color.green : Color(red: 0, green: 0.5, blue: 0)
     }
-    
+
     private var secondaryTextColor: Color {
         colorScheme == .dark ? Color.green.opacity(0.8) : Color(red: 0, green: 0.5, blue: 0).opacity(0.8)
     }
-    
+
     var body: some View {
         switch status {
         case .sending:
             Image(systemName: "circle")
                 .font(.system(size: 10))
                 .foregroundColor(secondaryTextColor.opacity(0.6))
-            
+
         case .sent:
             Image(systemName: "checkmark")
                 .font(.system(size: 10))
                 .foregroundColor(secondaryTextColor.opacity(0.6))
-            
+
         case .delivered(let nickname, _):
             HStack(spacing: -2) {
                 Image(systemName: "checkmark")
@@ -1189,7 +1189,7 @@ struct DeliveryStatusView: View {
             }
             .foregroundColor(textColor.opacity(0.8))
             .help("Delivered to \(nickname)")
-            
+
         case .read(let nickname, _):
             HStack(spacing: -2) {
                 Image(systemName: "checkmark")
@@ -1199,13 +1199,13 @@ struct DeliveryStatusView: View {
             }
             .foregroundColor(Color(red: 0.0, green: 0.478, blue: 1.0))  // Bright blue
             .help("Read by \(nickname)")
-            
+
         case .failed(let reason):
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 10))
                 .foregroundColor(Color.red.opacity(0.8))
                 .help("Failed: \(reason)")
-            
+
         case .partiallyDelivered(let reached, let total):
             HStack(spacing: 1) {
                 Image(systemName: "checkmark")
