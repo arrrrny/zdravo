@@ -1,4 +1,8 @@
-![ChatGPT Image Jul 5, 2025 at 06_07_31 PM](https://github.com/user-attachments/assets/2660f828-49c7-444d-beca-d8b01854667a)
+
+<div align="center">
+  <img src="landing-page/zdravo-icon.png" alt="Zdravo" width="128" height="128">
+</div>
+
 # Zdravo
 
 A secure, decentralized, peer-to-peer messaging app that works over Bluetooth mesh networks. No internet required, no servers, no phone numbers - just pure encrypted communication.
@@ -21,42 +25,6 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 - **Emergency Wipe**: Triple-tap to instantly clear all data
 - **Performance Optimizations**: LZ4 message compression, adaptive battery modes, and optimized networking
 
-## Setup
-
-### Option 1: Using XcodeGen (Recommended)
-
-1. Install XcodeGen if you haven't already:
-   ```bash
-   brew install xcodegen
-   ```
-
-2. Generate the Xcode project:
-   ```bash
-   cd bitchat
-   xcodegen generate
-   ```
-
-3. Open the generated project:
-   ```bash
-   open bitchat.xcodeproj
-   ```
-
-### Option 2: Using Swift Package Manager
-
-1. Open the project in Xcode:
-   ```bash
-   cd bitchat
-   open Package.swift
-   ```
-
-2. Select your target device and run
-
-### Option 3: Manual Xcode Project
-
-1. Open Xcode and create a new iOS/macOS App
-2. Copy all Swift files from the `bitchat` directory into your project
-3. Update Info.plist with Bluetooth permissions
-4. Set deployment target to iOS 16.0 / macOS 13.0
 
 ## Usage
 
